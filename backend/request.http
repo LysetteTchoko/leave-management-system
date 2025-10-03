@@ -1,0 +1,20 @@
+
+GET http://127.0.0.1:8000/api/viewUser
+Authorization: 9|o9ODLGhQLKxQgw6VlBcTsAu5jCd7yPGGOeNsfIA8d0d80aa4
+Accept: application/json
+
+### Create a new user
+POST http://127.0.0.1:8000/api/register
+Content-Type: application/json
+Authorization: 9|o9ODLGhQLKxQgw6VlBcTsAu5jCd7yPGGOeNsfIA8d0d80aa4
+
+{
+  "name": "John",
+  "email": "john@example.com",
+  "password": "secret"
+}
+
+### Logout current user
+POST http://127.0.0.1:8000/api/logout
+Authorization: 9|o9ODLGhQLKxQgw6VlBcTsAu5jCd7yPGGOeNsfIA8d0d80aa4
+Accept: application/json
