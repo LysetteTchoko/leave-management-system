@@ -147,7 +147,17 @@
     const currentPage = computed(() => pagination.value?.current_page || 1)
     const lastPage = computed(() => pagination.value?.last_page || 1) 
 
+    const loadInitialData = async () => {
+      try {
+        const users = await axios.get('getUser');
+        statut1.value = users.data.statut;
 
+        const statUser = await axios.get('statUser');
+        stat.value = statUser.data.data;
+        } catch (error) {
+            console.error("Erreur chargement données initiales", error)
+        }
+    }
     const filter = () => {
         loadPresence(1) // toujours revenir a la premiere page
     }

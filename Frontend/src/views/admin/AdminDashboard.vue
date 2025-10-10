@@ -30,7 +30,7 @@
             <div class="border shadow-lg bg-white p-4 col-span-4 mt-4">
                 <div class="flex-cols lg:flex lg:justify-between mb-4">
                     <h3 class="text-2xl  font-semibold text-center text-[#287196] lg:mb-0 mb-4">Historique des Employer </h3>
-                    <form class="flex flex-wrap lg:flex-nowrap gap-2 items-center">
+                    <form class="flex flex-wrap lg:flex-nowrap gap-2 items-center" @submit.prevent="filter">
                         <div class="flex items-center gap-2">
                             <span class="font-semibold">Status</span>
                             <select v-model="statut" class="border-2 p-1 border-[#287196] text-sm md:text-base" >
@@ -38,7 +38,6 @@
                                 <option v-for="(statut, index) in statuts" :key="index" :value="statut">
                                     {{ statut }}
                                 </option>
-                                <option value="">Libre</option>
                             </select>
                         </div>
                         <div class="flex flex-wrap md:flex-nowrap gap-2 items-center">
@@ -47,7 +46,7 @@
                             <span class="font-semibold">Au</span>
                             <input type="date" class="px-2 py-1 text-sm md:text-base border-[#287196] border-2 rounded" v-model="date_fin">
                         </div>
-                        <button class="bg-[#287196] text-white p-2 md:px-4 md:py-2 shadow font-bold rounded-lg w-full sm:w-auto" @click="filter">
+                        <button type="submit" class="bg-[#287196] text-white p-2 md:px-4 md:py-2 shadow font-bold rounded-lg w-full sm:w-auto">
                             Filtrer
                         </button>
                     </form>
@@ -108,7 +107,8 @@
   const stat = ref({
     retards_mois: 0,
     absences_mois: 0,
-    presence_mois: 0
+    presence_mois: 0,
+    nombre_user: 0
   });
   const date_debut = ref('');
   const date_fin = ref('');
@@ -134,24 +134,28 @@
                     date_fin: date_fin.value,
                 }
             })
-             userPresence.value = response.data.data.data 
+            
+            userPresence.value = response.data.data.data 
             pagination.value = response.data.data
-            console.log(userPresence.value);
-            const users = await axios.get('getUser');
-        user.value = users.data.data;
-        statut.value = users.data.statut;
-
-        const statUser = await axios.get('statGlobal');
-        stat.value = statUser.data.data;
-           
         } catch (error) {
             console.error("Erreur chargement Presence", error)
         } 
     }
 
+    const loadInitialData = async () => {
+        try {
+            const users = await axios.get('getUser');
+            user.value = users.data.data;
+
+            const statUser = await axios.get('statGlobal');
+            stat.value = statUser.data.data;
+        } catch (error) {
+            console.error("Erreur chargement données initiales", error)
+        }
+    }
+
     const currentPage = computed(() => pagination.value?.current_page || 1)
     const lastPage = computed(() => pagination.value?.last_page || 1) 
-
 
     const filter = () => {
         loadPresence(1) // toujours revenir a la premiere page
@@ -171,5 +175,6 @@
   onMounted(() => {
         loadPresence()
         getStatut()
+        loadInitialData()
     })
 </script>

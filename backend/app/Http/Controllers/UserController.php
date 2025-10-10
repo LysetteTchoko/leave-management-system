@@ -239,13 +239,12 @@ class UserController extends Controller
         $employer = $user->employer; 
 
         $retard = $employer->retard()
-            ->whereMonth('date_retard', $today->month)
-            ->whereYear('date_retard', $today->year);
+        ->whereDate('date_retard', $today)
+        ->first();
 
-        $present = $employer->presence()
-            ->where('statut', 'absent')
-            ->whereMonth('date_presence', $today->month)
-            ->whereYear('date_presence', $today->year);
+         $present = $employer->presence()
+        ->whereDate('date_presence', $today)
+        ->first();
 
         $employe = Employer::find($user->id_employer);    
         
@@ -265,5 +264,4 @@ class UserController extends Controller
         ]);
     }
 
-    
 }

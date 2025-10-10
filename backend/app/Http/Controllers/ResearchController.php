@@ -18,7 +18,7 @@ class ResearchController extends Controller
         $endDate = $request->endDate;
 
         $data =Presence::with('employer') 
-            ->whereBetween('created_at', [$startDate, $endDate])
+            ->whereBetween('date_presence', [$startDate, $endDate])
             ->get();
 
         return response()->json([
@@ -33,7 +33,7 @@ class ResearchController extends Controller
         $endDate = $request->endDate;
 
         $data = Retard::with('employer') 
-            ->whereBetween('created_at', [$startDate, $endDate])
+            ->whereBetween('date_retard', [$startDate, $endDate])
             ->get();
 
         return response()->json([
@@ -75,7 +75,7 @@ class ResearchController extends Controller
                 ->whereYear('date_presence', $now->year)
                 ->count(),
             'presence_mois' => $employer->presence()
-                ->where('statut', 'present')
+                ->whereIn('statut', ['present', 'hors_zone'])
                 ->whereMonth('date_presence', $now->month)
                 ->whereYear('date_presence', $now->year)
                 ->count(),
@@ -94,7 +94,7 @@ class ResearchController extends Controller
         $stats = [
             'nombre_user' => User::count(),
 
-            'presence_mois' => Presence::where('statut', 'present')
+            'presence_mois' => Presence::whereIn('statut', ['present', 'hors_zone'])
                 ->whereMonth('date_presence', $today->month)
                 ->whereYear('date_presence', $today->year)
                 ->count(),

@@ -29,8 +29,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route::post('/login',[AuthController::class, 'login']);
 Route::post('/registerUser',[UserController::class, 'register']);
- Route::get('/getAllUserPresence',[PresenceController::class, 'getAllUserPresence']);
-
+ 
 Route::middleware("auth:sanctum")->group(function(){
     Route::post('/createEmploye',[EmployerController::class, 'createEmploye']);
     Route::delete('/deleteEmploye/{id}',[EmployerController::class, 'deleteEmploye']);
