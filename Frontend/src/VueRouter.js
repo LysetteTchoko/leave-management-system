@@ -7,9 +7,10 @@ import Profil from './views/main/Profil.vue'
 import DashUser from './views/user/UserDashboard.vue'
 import DashAdmin from './views/admin/AdminDashboard.vue'
 import ManageUser from './views/admin/ManageUser.vue'
-import DashRh from "./views/rh/DashboardRh.vue";
+import DashComite from "./views/rh/DashboardRh.vue";
 import CongeUser from "./views/rh/CongeUser.vue"; 
 import RetardUser from "./views/rh/RetardUser.vue";
+import Employe from "./views/rh/Employe.vue";
 import Conge from "./views/user/Conge.vue"; 
 import Retard from "./views/user/Retard.vue";
 import AddConge from "./views/user/AddConge.vue";
@@ -25,9 +26,10 @@ const routes = [
       { path: 'profil', component: Profil  , meta: { requiresAuth: true }},
       { path: 'admin/dashboard', component: DashAdmin  , meta: { requiresAuth: true }},
       { path: 'admin/users', component: ManageUser  , meta: { requiresAuth: true }},
-      { path: 'rh/dashboard', component: DashRh , meta: { requiresAuth: true }},
-      { path: 'rh/conge', component: CongeUser , meta: { requiresAuth: true }},
-      { path: 'rh/retard', component: RetardUser , meta: { requiresAuth: true }},
+      { path: 'comite/dashboard', component: DashComite , meta: { requiresAuth: true }},
+      { path: 'comite/conge', component: CongeUser , meta: { requiresAuth: true }},
+      { path: 'comite/retard', component: RetardUser , meta: { requiresAuth: true }},
+      { path: 'comite/employe', component: Employe , meta: { requiresAuth: true }},
       { path: 'user/conge', component: Conge , meta: { requiresAuth: true }},
       { path: 'user/retard', component: Retard , meta: { requiresAuth: true }},
       { path: 'user/addConge', component: AddConge , meta: { requiresAuth: true }},

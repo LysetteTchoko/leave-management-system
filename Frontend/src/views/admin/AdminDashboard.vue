@@ -172,7 +172,7 @@
             loadPresence(pagination.value.current_page + 1)
         }
     }
-  onMounted(() => {
+    onMounted(() => {
         loadPresence()
         getStatut()
         loadInitialData()

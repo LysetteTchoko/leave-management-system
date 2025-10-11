@@ -80,7 +80,7 @@
         if (role.value == 'admin') {
           router.push('/app/admin/dashboard');
         } else if (role.value == 'comite') {
-          router.push('/app/rh/dashboard');
+          router.push('/app/comite/dashboard');
         } else  {
           router.push('/app/user/dashboard');
         }

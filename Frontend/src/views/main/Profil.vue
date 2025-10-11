@@ -33,7 +33,7 @@
 
 <script setup>
   import { ref,onMounted, computed } from "vue";
-  import photo from '../../assets/chat.png'
+  import defaultUser from '@/assets/default-user.svg'
   import  ModifyProfil from "../../components/ModifyProfil.vue"
   import IconModify from "../../components/icons/IconModify.vue"
   import axios  from "axios";
@@ -54,7 +54,7 @@
     if (user.value.photo) {
       return `${import.meta.env.VITE_API_URL}/storage/userprofile/${user.value.photo}`;
     }
-    return photo; 
+    return defaultUser; 
   });
   const toggleModify = () => {
     showModif.value = !showModif.value

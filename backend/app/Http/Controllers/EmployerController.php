@@ -18,7 +18,7 @@ class EmployerController extends Controller
             'telephone' => $request->telephone,
             'departement' => $request->departement,
             'date_embauche' => $request->date_embauche,
-            'statut' => $request->status
+            'statut' => $request->statut
         ]);
 
         return response()->json([
@@ -27,13 +27,40 @@ class EmployerController extends Controller
         ]);
     }
     
-    public function viewEmployer(){
-        $employer = Employer::paginate(7);
+    public function viewEmployer(Request $request)
+    {
+        $query = Employer::query();
+
+        if ($request->filled('nom')) {
+            $search = $request->nom;
+            $query->where(function ($q) use ($search) {
+                $q->where('nom', 'like', "%{$search}%")
+                ->orWhere('prenom', 'like', "%{$search}%");
+            });
+        }
+
+        $employers = $query->orderBy('nom')->paginate(8);
+
         return response()->json([
-            'message' => 'Liste des employer',
+            'message' => 'Liste des employés',
+            'data' => $employers
+        ]);
+    }
+
+    public function getEmployeId($id)
+    {
+        $employer = Employer::where('id_employer', $id)->first();
+
+        if (!$employer) {
+            return response()->json(['message' => 'Employer not found']);
+        }
+
+        return response()->json([
+            'message' => 'Infos de L\'employer',
             'data' => $employer
         ]);
     }
+
 
     public function deleteEmploye($id)
     {
@@ -70,8 +97,8 @@ class EmployerController extends Controller
         if(!empty($request->date_embauche)){
             $employer->date_embauche = $request->date_embauche;
         }
-        if(!empty($request->status)){
-            $employer->status = $request->status;
+        if(!empty($request->statut)){
+            $employer->statut = $request->statut;
         }
 
         $employer->save();

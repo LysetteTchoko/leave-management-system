@@ -1,8 +1,7 @@
 <template>
     <aside @mouseenter="onHover(true)" @mouseleave="onHover(false)"
-        :class="['flex flex-col items-center text-black transition-all duration-300 bg-white shadow-lg z-40',
-         'fixed top-12 left-0 h-[calc(100vh-3rem)] pt-6','w-64','md:w-20 md:hover:w-64','lg:w-64',
-         isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0']">
+    class="flex flex-col items-center text-black transition-all duration-300 bg-white shadow-lg z-40 fixed top-12 left-0 h-[calc(100vh-3rem)] pt-6 w-64 md:w-20 md:hover:w-64 lg:w-64"
+    :class="isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'">
         <div class="rounded-full bg-white border border-[#287196] hidden md:block overflow-hidden mb-6 w-12 h-12 lg:w-32 lg:h-32 flex-shrink-0">
           <img :src="imageUrl" class="w-full h-full object-cover">
         </div>
@@ -41,7 +40,7 @@
     </aside>    
 </template>
 <script setup>
-    import photo from '../assets/chat.png'
+    import defaultUser from '../assets/default-user.svg'
     import IconLogout from './icons/IconLogout.vue'
     import IconUser from './icons/IconUser.vue'
     import IconUsers from './icons/IconUsers.vue'
@@ -71,7 +70,7 @@
         if (user.value.photo) {
             return `${import.meta.env.VITE_API_URL}/storage/userprofile/${user.value.photo}`;
         }
-        return photo; 
+        return defaultUser; 
     });
 
     const onHover = (value) => {
@@ -108,9 +107,10 @@
             { name: "Utilisateurs", path: "/app/admin/users",icon: IconUsers },
         ],
         comite: [
-            { name: "Tableau de Bord", path: "/app/admin/dashboard", icon: IconHome },
-            { name: "Conge", path: "/app/rh/conge", icon: IconCalendar },
-            { name: "Retard", path: "/app/rh/retard", icon: IconClock },
+            { name: "Tableau de Bord", path: "/app/comite/dashboard", icon: IconHome },
+            { name: "Conge", path: "/app/comite/conge", icon: IconCalendar },
+            { name: "Retard", path: "/app/comite/retard", icon: IconClock },
+            { name: "Gestion des employés", path: "/app/comite/employe", icon: IconClock },
         ],
         employe: [
             { name: 'Tableau de Bord', path: '/app/user/dashboard', icon: IconHome },

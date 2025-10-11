@@ -21,7 +21,7 @@ class Employer extends Model
       'telephone',
       'departement',
       'date_embauche',
-      'status'
+      'statut'
    ];
 
 

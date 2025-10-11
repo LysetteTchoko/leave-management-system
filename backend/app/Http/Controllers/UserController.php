@@ -96,7 +96,7 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $validated = $request->validate([
             'username' => 'sometimes|min:2',
-            'email' => 'sometimes|email|unique:users,email,'.$user->id,
+            'email' => 'sometimes|email|unique:users,email,'.$user->id_user.',id_user',
             'role'=> 'sometimes|in:admin,comite,employe',
             'password' => 'sometimes|min:6',
         ]);
