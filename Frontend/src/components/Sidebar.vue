@@ -60,15 +60,15 @@
 
     onMounted(async () => {
         const storedUser = localStorage.getItem('user');
-        const user = storedUser ? JSON.parse(storedUser) : null;
+        user.value = storedUser ? JSON.parse(storedUser) : null;
 
-        role.value =  user.role;
+        role.value = user.value.role;
         
         onHover(false)
     })
     const imageUrl = computed(() => {
         if (user.value.photo) {
-            return `${import.meta.env.VITE_API_URL}/storage/userprofile/${user.value.photo}`;
+            return `${import.meta.env.VITE_API_URL}/storage/userProfile/${user.value.photo}`;
         }
         return defaultUser; 
     });

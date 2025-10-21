@@ -42,4 +42,36 @@ const router = createRouter({
   routes,
 })
 
+// Navigation Guard pour proteger les routes
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('token');
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const isAuthenticated = !!token;
+
+  // Si la route necessite l'authentification
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (!isAuthenticated) {
+      // Pas de token, rediriger vers login
+      next({ path: '/' });
+    } else {
+      // Token present, autoriser
+      next();
+    }
+  } // Si l'utilisateur est connecte et essaie d'accéder à login/register
+  else if ((to.path === '/' || to.path === '/register') && isAuthenticated) {
+    // Rediriger vers le dashboard selon le role
+    if (user.role === 'admin') {
+      next({ path: '/app/admin/dashboard' });
+    } else if (user.role === 'comite') {
+      next({ path: '/app/comite/dashboard' });
+    } else {
+      next({ path: '/app/user/dashboard' });
+    }
+  } 
+  else {
+    // Route publique, autoriser
+    next();
+  }
+});
+
 export default router;

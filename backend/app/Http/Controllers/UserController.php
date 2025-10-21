@@ -9,6 +9,7 @@ use App\Models\Presence;
 use App\Models\Retard;
 use App\Http\Requests\RegisterUserRequest;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 
@@ -38,11 +39,11 @@ class UserController extends Controller
         if ($request->hasFile('photo')) {
             $file = $request->file('photo');
             $extension = $file->getClientOriginalExtension();
-            $filename  = now()->format('Ymd_His') . '_' . mt_rand(1000,9999) . '.' . $extension;
             $folder = env('USER_PHOTO_PATH', 'userProfile');
-            $destinationPath = public_path($folder);
-            $file->move($destinationPath, $filename);
-            $photoPath = $filename;
+            $filename = now()->format('Ymd_His') . '_' . mt_rand(1000,9999) . '.' . $extension;
+            // stocke dans storage/app/public/userProfile/
+            $file->storeAs($folder, $filename, 'public');
+            $photoPath = $filename;        
         }
     
         $user = User::create([
@@ -137,33 +138,41 @@ class UserController extends Controller
     public function updatePhoto(Request $request)
     {
         $user = auth()->user();
-        $request->validate([
-            'photo' => 'nullable|image',
-        ]);
+        
+        try {
+            $request->validate([
+                'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            ]);
 
-        if ($request->hasFile('photo')) {
-            $file = $request->file('photo');
-            $extension = $file->getClientOriginalExtension();
-            $filename  = now()->format('Ymd_His') . '_' . mt_rand(1000,9999) . '.' . $extension;
-            $folder = env('USER_PHOTO_PATH', 'userProfile');
-            $destinationPath = public_path($folder);
+            if ($request->hasFile('photo')) {
+                $file = $request->file('photo');
+                $extension = $file->getClientOriginalExtension();
+                $filename  = now()->format('Ymd_His') . '_' . mt_rand(1000,9999) . '.' . $extension;
+                $folder = env('USER_PHOTO_PATH', 'userProfile');
 
-            if($user->photo && file_exists($destinationPath.'/'.$user->photo)){
-                unlink($destinationPath.'/'.$user->photo);
+                //supprimer l'ancienne photo si ça existe
+                if($user->photo && Storage::disk('public')->exists('userProfile/'.$user->photo)){
+                    Storage::disk('public')->delete('userProfile/'.$user->photo);
+                }
+                
+                // Stocker le fichier
+                $file->storeAs($folder, $filename, 'public');
+                $user->photo = $filename;
+                $user->save();
+
+                return response()->json([
+                    'message' => 'Photo mis à jour avec succès',
+                    'data' => $user
+                ]);
+            }else{
+                return response()->json([
+                    'message' => 'Aucune photo reçue',
+                ], 400);
             }
-            $file->move($destinationPath, $filename);
-            $user->photo = $filename;
-            $user->save();
-
+        } catch (\Exception $e) {
             return response()->json([
-                'message' => 'Photo mis à jour avec succès',
-                'data' => $user
-            ]);
-        }else{
-            return response()->json([
-                'message' => 'Erreur',
-                'data' => $user
-            ]);
+                'message' => 'Erreur: ' . $e->getMessage()
+            ], 500);
         }
     }
 

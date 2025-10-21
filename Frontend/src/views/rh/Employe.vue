@@ -36,15 +36,15 @@
                 </thead>
                 <tbody>
                     <tr v-for="employe in employes" :key="employe.id_employer" class="border-b hover:bg-gray-100">
-                    <td class="px-2 py-2 text-center">{{ employe.matricule }}</td>
-                    <td class="px-2 py-2 text-center">{{ employe.nom }}</td>
-                    <td class="px-2 py-2 text-center">{{ employe.prenom }}</td>
-                    <td class="px-2 py-2 text-center">{{ employe.email }}</td>
-                    <td class="px-2 py-2 text-center">{{ employe.poste }}</td>
-                    <td class="px-2 py-2 text-center">{{ employe.telephone }}</td>
-                    <td class="px-2 py-2 text-center">{{ employe.departement }}</td>
-                    <td class="px-2 py-2 text-center">{{ employe.date_embauche }}</td>
-                    <td class="px-2 py-2 text-center">{{ employe.statut }}</td>
+                    <td class="px-2 py-2 text-left">{{ employe.matricule }}</td>
+                    <td class="px-2 py-2 text-left">{{ employe.nom }}</td>
+                    <td class="px-2 py-2 text-left">{{ employe.prenom }}</td>
+                    <td class="px-2 py-2 text-left">{{ employe.email }}</td>
+                    <td class="px-2 py-2 text-left">{{ employe.poste }}</td>
+                    <td class="px-2 py-2 text-left">{{ employe.telephone }}</td>
+                    <td class="px-2 py-2 text-left">{{ employe.departement }}</td>
+                    <td class="px-2 py-2 text-left">{{ employe.date_embauche }}</td>
+                    <td class="px-2 py-2 text-left">{{ employe.statut }}</td>
                     <td class="place-items-center text-center ">
                         <div class="flex">
                         <button class="bg-yellow-500 px-2 py-2  my-1 text-black shadow font-bold rounded-lg" @click="toggleEmploye(employe.id_employer)">Modifier</button>

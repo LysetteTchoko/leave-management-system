@@ -42,7 +42,7 @@ Route::middleware("auth:sanctum")->group(function(){
     Route::put('/updateUser',[UserController::class, 'updateUser']);
     Route::put('/updateUsers/{id}',[UserController::class, 'updateUsers']);
     Route::put('/updateRole/{id}',[UserController::class, 'updateRole']);
-    Route::put('/updatePhoto',[UserController::class, 'updatePhoto']);
+    Route::post('/updatePhoto',[UserController::class, 'updatePhoto']);
     Route::get('/viewUser',[UserController::class, 'viewUser']);
     Route::get('/getRoles',[UserController::class, 'getRoles']);
     Route::get('/getType',[UserController::class, 'getType']);

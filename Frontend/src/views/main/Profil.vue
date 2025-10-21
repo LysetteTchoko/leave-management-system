@@ -15,18 +15,19 @@
         </div>
       </div>
       <div class="relative shadow-lg bg-white p-4 flex items-center justify-center">
-        <div class="rounded-full bg-white border-2 border-[#287196] overflow-hidden w-32 md:w-64  items-center justify-center">
-          <img :src="imageUrl" class="w-full h-full">
-          <form @submit.prevent="uploadImage" class="absolute bottom-8 right-32 lg:bottom-16 lg:right-36">
+        <div class="relative">
+          <div class="rounded-full bg-white border-2 border-[#287196] overflow-hidden w-32 h-32 md:w-64 md:h-64 flex items-center justify-center">
+            <img :src="imageUrl" class="w-full h-full object-cover" >
+          </div>
+          <form @submit.prevent="uploadImage" class="absolute bottom-0 right-0 md:bottom-1 md:right-1">
             <input type="file" id="fileInput" class="hidden" @change="handleFile" accept="image/*"/>
-            <label for="fileInput" class="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-full
+            <label for="fileInput" class="bg-blue-600 hover:bg-blue-700 text-white p-2 md:p-3 rounded-full
               shadow-lg cursor-pointer flex items-center justify-center">
-              <IconModify/>
+              <IconModify class="w-6 h-6 md:w-6 md:h-6"/>
             </label>
           </form>
         </div>
       </div>
-      <ModifyProfil :showModif="showModif" :toggleModify="toggleModify"/>
     </div>
   </div>      
 </template>
@@ -40,8 +41,13 @@
 
   const showModif = ref(false);
   const user = ref({});
+  const result = ref('');
   const employer = ref({});
   const imageFile = ref(null);
+
+   const toggleModify = () => {
+    showModif.value = !showModif.value
+  }
 
   onMounted(async () => {
     const response = await axios.get('getUser');
@@ -52,14 +58,11 @@
 
   const imageUrl = computed(() => {
     if (user.value.photo) {
-      return `${import.meta.env.VITE_API_URL}/storage/userprofile/${user.value.photo}`;
+      return `${import.meta.env.VITE_API_URL}/storage/userProfile/${user.value.photo}`;
     }
     return defaultUser; 
   });
-  const toggleModify = () => {
-    showModif.value = !showModif.value
-  }
-
+ 
   //recuperer l'image et le stoker dans imageFile
   function handleFile(event) {
     const file = event.target.files[0]
@@ -71,7 +74,7 @@
 
   async function uploadImage() {
     if (!imageFile.value) {
-      alert('Please select an image first.')
+      result.value = 'Veuillez sélectionner une image.'
       return
     }
     
@@ -86,10 +89,23 @@
         }
       })
 
-      console.log('Image uploaded successfully:', response.data)
+      if (response.data.data) {
+        // Update user data avec la nouvelle photo
+        user.value = response.data.data
+        localStorage.setItem('user', JSON.stringify(response.data.data))
+        result.value = 'Photo mise à jour avec succès!'
+        
+        // Recharger la page après 2 secondes
+        setTimeout(() => {
+          window.location.reload()
+          result.value = ''
+        }, 2000)
+      } else {
+        result.value = 'Pas de données dans la réponse'
+      }
     } catch (error) 
     {
-      console.error('Image upload failed:', error)
+      result.value = 'Erreur lors de la mise à jour de la photo: ' + (error.response?.data?.message || error.message)
     }
   }
 
